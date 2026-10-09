@@ -1,6 +1,7 @@
   import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Navbar from "./components/common/Navbar";
 import Home from "./pages/Home";
+import Product from "./pages/Product";
 
 function App() {
 
@@ -9,7 +10,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<h1>Shop</h1>} />
+        <Route path="/products" element={<Product />} />
         <Route path="/categories" element={<h1>Categories</h1>} />
         <Route path ="/cart" element={<h1>Cart</h1>} />
         <Route path ="/wishlist" element={<h1>Wishlist</h1>} />
