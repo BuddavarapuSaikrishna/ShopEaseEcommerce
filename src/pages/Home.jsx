@@ -5,7 +5,7 @@ import TrendingProducts from "../components/home/TrendingProducts";
 import NewArrivals from "../components/home/NewArrivals";
 import SpecialOffers from "../components/home/SpecialOffers";
 import WhyShopEase from "../components/home/WhyShopEase";
-//import Footer from "../components/common/Footer";
+import Footer from "../components/common/Footer";
 
 function Home() {
   return (
@@ -17,6 +17,7 @@ function Home() {
       <NewArrivals/>
       <SpecialOffers/>
       <WhyShopEase/>
+      <Footer/>
   
     </main>
   );
