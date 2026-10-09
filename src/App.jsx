@@ -2,6 +2,8 @@
 import Navbar from "./components/common/Navbar";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
+import Deals from "./pages/Deals";
+
 
 function App() {
 
@@ -17,7 +19,7 @@ function App() {
         <Route path ="/login" element={<h1>Login</h1>} />
         <Route path ="/register" element={<h1>Register</h1>} />
         <Route path ="/profile" element={<h1>Profile</h1>} />
-        <Route path = '/deals' element={<h1>Deals</h1>} />
+        <Route path = '/deals' element={<Deals />} />
       </Routes>
     </Router>
   )
