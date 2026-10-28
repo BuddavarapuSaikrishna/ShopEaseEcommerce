@@ -1,15 +1,13 @@
+
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/common/Navbar";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import Deals from "./pages/Deals";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Categories from "./pages/Categories";
+
 
 function App() {
-  const location = useLocation();
-  const hideNavbarRoutes =
-    location.pathname === "/login" || location.pathname === "/register";
   return (
     <>
       {!hideNavbarRoutes && <Navbar />}
