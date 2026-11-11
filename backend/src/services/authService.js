@@ -1,13 +1,46 @@
 const validator = require("validator");
 const argon2 = require("argon2");
 
-const { emailExists, createUser } = require("../models/userModel");
+const {
+  emailExists,
+  createUser,
+  findUserByEmail,
+} = require("../models/userModel");
 
 // Helper to create errors with HTTP status
 const createServiceError = (message, statusCode) => {
   const error = new Error(message);
   error.statusCode = statusCode;
   return error;
+};
+
+//Validate Login input
+
+const validateLoginInput = (data) => {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw createServiceError("Invalid login data", 400);
+  }
+
+  const { email, password } = data;
+
+  if (typeof email !== "string" || typeof password !== "string") {
+    throw createServiceError("Email and password are required", 400);
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (!validator.isEmail(normalizedEmail)) {
+    throw createServiceError("Please provide a valid email address", 400);
+  }
+
+  if (password.length === 0) {
+    throw createServiceError("Password is required", 400);
+  }
+
+  return {
+    email: normalizedEmail,
+    password,
+  };
 };
 
 // Validate registration input
@@ -95,7 +128,7 @@ const registerUser = async (data) => {
   const alreadyRegistered = await emailExists(validatedData.email);
 
   if (alreadyRegistered) {
-    throw createServiceError("Email is already registered. Please login.", 439);
+    throw createServiceError("Email is already registered. Please login.", 409);
   }
 
   // 3. Hash password
@@ -129,6 +162,40 @@ const registerUser = async (data) => {
   }
 };
 
+const loginUser = async (data) => {
+  // 1. Validate login details
+  const validatedData = validateLoginInput(data);
+
+  // 2. Find customer using email
+  const user = await findUserByEmail(validatedData.email);
+
+  // 3. Check whether customer exists
+  if (!user) {
+    throw createServiceError("Invalid email or password", 401);
+  }
+
+  // 4. Verify entered password with stored hash
+  const isPasswordValid = await argon2.verify(
+    user.password_hash,
+    validatedData.password,
+  );
+
+  // 5. Reject incorrect password
+  if (!isPasswordValid) {
+    throw createServiceError("Invalid email or password", 401);
+  }
+
+  // 6. Return safe customer information
+  return {
+    id: user.id,
+    fullName: user.full_name,
+    email: user.email,
+    role: user.role,
+    subscription_type: user.subscription_type,
+  };
+};
+
 module.exports = {
   registerUser,
+  loginUser,
 };

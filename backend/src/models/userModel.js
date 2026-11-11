@@ -1,5 +1,19 @@
 const pool = require("../config/db");
 
+//find user By email
+
+const findUserByEmail = async (email) => {
+  const [rows] = await pool.execute(
+    `select id,full_name,
+    email,
+    password_hash,
+    role,subscription_type
+     from users where email = ? limit 1`,
+    [email],
+  );
+  return rows[0] || null;
+};
+
 // check email exists or not
 const emailExists = async (email) => {
   const [rows] = await pool.execute(
@@ -28,4 +42,5 @@ const createUser = async (fullName, email, passwordHash) => {
 module.exports = {
   emailExists,
   createUser,
+  findUserByEmail,
 };

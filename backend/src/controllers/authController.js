@@ -1,4 +1,5 @@
-const { registerUser } = require("../services/authService");
+const { registerUser, loginUser } = require("../services/authService");
+const generateToken = require("../utils/generateToken");
 
 const register = async (req, res, next) => {
   try {
@@ -16,6 +17,26 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const user = await loginUser(req.body);
+
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: {
+        user,
+        token,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   register,
+  login,
 };
