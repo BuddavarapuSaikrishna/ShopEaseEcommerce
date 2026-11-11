@@ -10,6 +10,7 @@ const cors = require("cors");
 
 // 2. Import routes
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // 3. Import custom middlewares
 const notFound = require("./middlewares/notFound");
@@ -41,6 +42,8 @@ app.get("/api/health", (req, res) => {
 
 // 9. Authentication routes
 app.use("/api/auth", authRoutes);
+
+app.use("/api/users", userRoutes);
 
 // 10. Handle undefined routes
 app.use(notFound);
